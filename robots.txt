@@ -1,42 +1,283 @@
-# Indique aux robots que toutes les pages peuvent être explorées, sauf restrictions spécifiées
+# robots.txt v3.5 - 2025-05-28
+# Optimisé pour https://clairvoyancemedium.github.io/Bantningskapsel-for-att-snabbt-ga-ner-i-vikt-utan-att-behova-avsta-fran-nagot.github.io/
+# Mål: Global SEO, frekvent crawling, AI/röstassistenter/sociala medier, flerspråkig, maximal skydd
+
+# --- Allmänna direktiv för alla legitima crawlers ---
 User-agent: *
-Disallow: /admin/
-Disallow: /tmp/
-Disallow: /private/
+Allow: /
+Allow: /[a-z]{2}/  # Flerspråkiga sidor (/sv/, /en/, /es/, etc.)
+Allow: /villkor/   # Allmänna villkor
+Allow: /typsnitt/  # Teckensnitt för rendering
+Allow: /bilder/    # Bilder för indexering
+Allow: /js/        # Interaktiva skript
+Allow: /css/       # CSS mobile-first
+Allow: /*.webp$    # WebP-bilder
+Allow: /*.jpg$     # JPG-bilder
+Allow: /*.png$     # PNG-bilder
+Allow: /*.gif$     # GIF-bilder
+Allow: /*.js$      # JavaScript-skript
+Allow: /*.css$     # CSS-filer
+Disallow: /csp-rapport-endpoint/  # Skydda CSP
+Disallow: /kontakt/              # Kontaktsida
+Disallow: /integritet/           # Integritetspolicy
+Disallow: /kassa/                # Transaktionssidor
+Disallow: /sok/                 # Söksidor
+Disallow: /api/                 # API-slutpunkter
+Disallow: /test/                # Testmappar
+Disallow: /mellanlagring/       # Mellanlagringsmiljöer
+Clean-param: utm_source&utm_medium&utm_campaign&lang&session_id  # Tillåt användbara parametrar
 
-# Bloquer des URL avec paramètres inutiles pour l'indexation
-Disallow: /*?debug=true
-Disallow: /*?preview=true
-
-# Permettre les fichiers nécessaires au bon affichage et fonctionnement
-Allow: /css/
-Allow: /js/
-Allow: /images/
-
-# Référencement des ressources multimédias
-Allow: *.png
-Allow: *.jpg
-Allow: *.webp
-Allow: *.css
-Allow: *.js
-
-# Fournir le chemin du fichier sitemap pour une meilleure indexation
-Sitemap: https://www.clairvoyancemedium.com/sitemap.xml
-
-# Autorisation pour les robots Google et Bing pour maximiser les campagnes publicitaires
+# --- Direktiv för Googlebot (Google, Google Assistant) ---
 User-agent: Googlebot
+Crawl-delay: 1
+Allow: /blogg/     # Rik innehåll för SEO
+Allow: /artikel/   # Artiklar för snippets
+Clean-param: utm_source&utm_medium&utm_campaign&lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+
+# --- Direktiv för Googlebot-Image ---
+User-agent: Googlebot-Image
+Allow: /bilder/
+Allow: /*.webp$
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.gif$
+Disallow: /favicon_optimerad.webp  # Undvik favicon
+
+# --- Direktiv för Googlebot-Video ---
+User-agent: Googlebot-Video
+Crawl-delay: 1
 Allow: /
-User-agent: AdsBot-Google
-Allow: /
+Allow: /[a-z]{2}/
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+
+# --- Direktiv för Bingbot (Bing, Cortana) ---
 User-agent: Bingbot
+Crawl-delay: 2
+Allow: /blogg/
+Allow: /artikel/
+Clean-param: utm_source&utm_medium&utm_campaign&lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+
+# --- Direktiv för Yandex (Yandex, Alice) ---
+User-agent: Yandex
+Crawl-delay: 3
+Allow: /blogg/
+Allow: /artikel/
+Clean-param: utm_source&utm_medium&utm_campaign&lang&session_id
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+
+# --- Direktiv för Baiduspider (Kina) ---
+User-agent: Baiduspider
+Crawl-delay: 3
+Allow: /zh/        # Prioritera kinesiska
+Allow: /blogg/
+Allow: /artikel/
+Clean-param: lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+Disallow: /api/
+Disallow: /test/
+Disallow: /mellanlagring/
+
+# --- Direktiv för Sogou (Kina) ---
+User-agent: Sogou
+Crawl-delay: 4
+Allow: /zh/
+Allow: /blogg/
+Allow: /artikel/
+Clean-param: lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+Disallow: /api/
+Disallow: /test/
+Disallow: /mellanlagring/
+
+# --- Direktiv för Applebot (Siri, Apple) ---
+User-agent: Applebot
+Crawl-delay: 2
+Allow: /blogg/
+Allow: /artikel/
+Clean-param: utm_source&utm_medium&utm_campaign&lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+
+# --- Direktiv för Amazonbot (Alexa, Amazon) ---
+User-agent: Amazonbot
+Crawl-delay: 3
+Allow: /blogg/
+Allow: /artikel/
+Clean-param: utm_source&utm_medium&utm_campaign&lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+
+# --- Direktiv för Naverbot (Japan/Korea) ---
+User-agent: Naverbot
+Crawl-delay: 3
+Allow: /ja/        # Prioritera japanska
+Allow: /ko/        # Prioritera koreanska
+Allow: /blogg/
+Allow: /artikel/
+Clean-param: lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+
+# --- Direktiv för SeznamBot (Tjeckien) ---
+User-agent: SeznamBot
+Crawl-delay: 3
+Allow: /cs/        # Prioritera tjeckiska
+Allow: /blogg/
+Allow: /artikel/
+Clean-param: lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+
+# --- Direktiv för Qwantify (Qwant, Europa) ---
+User-agent: Qwantify
+Crawl-delay: 4
+Allow: /fr/        # Prioritera franska
+Allow: /blogg/
+Allow: /artikel/
+Clean-param: lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+
+# --- Direktiv för DuckDuckGoBot (Global) ---
+User-agent: DuckDuckGoBot
+Crawl-delay: 2
 Allow: /
+Allow: /[a-z]{2}/
+Allow: /blogg/
+Allow: /artikel/
+Clean-param: utm_source&utm_medium&utm_campaign&lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
 
-# Bloquer les robots nuisibles ou non désirés
-User-agent: BadBot
-Disallow: /
-User-agent: EvilScraper
+# --- Direktiv för JioSphere (Indien) ---
+User-agent: JioSphere
+Crawl-delay: 3
+Allow: /hi/        # Prioritera hindi
+Allow: /blogg/
+Allow: /artikel/
+Clean-param: lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+
+# --- Direktiv för konversations-AI-crawlers ---
+User-agent: Grok
+User-agent: ChatGPT-User
+User-agent: GPTBot
+User-agent: openai-crawler
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: cohere-ai
+User-agent: PerplexityBot
+User-agent: CCBot
+User-agent: youbot
+User-agent: phindbot
+User-agent: GeminiBot  # Google AI
+Crawl-delay: 4
+Allow: /
+Allow: /[a-z]{2}/
+Allow: /blogg/     # Konversationsutdrag
+Allow: /artikel/
+Allow: /bilder/
+Allow: /*.webp$
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.gif$
+Clean-param: utm_source&utm_medium&utm_campaign&lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+Disallow: /api/
+Disallow: /test/
+Disallow: /mellanlagring/
+
+# --- Direktiv för sociala medier-crawlers ---
+User-agent: FacebookBot
+User-agent: Twitterbot
+User-agent: redditbot
+User-agent: TikTokBot  # Framväxande sociala medier
+Crawl-delay: 2
+Allow: /
+Allow: /[a-z]{2}/
+Allow: /blogg/     # Sociala förhandsvisningar
+Allow: /artikel/
+Allow: /bilder/
+Allow: /*.webp$
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.gif$
+Clean-param: utm_source&utm_medium&utm_campaign&lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+
+# --- Blockera oönskade crawlers ---
+User-agent: MJ12bot
+User-agent: AhrefsBot
+User-agent: PetalBot
+User-agent: DotBot
 Disallow: /
 
-# Empêcher l'exploration des fichiers sensibles
-Disallow: /config/
-Disallow: /backup/
+# --- Tillåt SemrushBot för SEO-granskningar ---
+User-agent: SemrushBot
+Crawl-delay: 5
+Allow: /
+Allow: /[a-z]{2}/
+Allow: /blogg/
+Allow: /artikel/
+Allow: /bilder/
+Allow: /*.webp$
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.gif$
+Clean-param: utm_source&utm_medium&utm_campaign&lang
+Disallow: /csp-rapport-endpoint/
+Disallow: /kontakt/
+Disallow: /integritet/
+Disallow: /kassa/
+
+# --- Skydd mot okända crawlers ---
+User-agent: *
+Disallow: /  # Blockera som standard om inte explicit tillåtet
+
+# --- Optimering av crawling ---
+Crawl-delay: 1
+Request-rate: 1/4  # 1 förfrågan/4s för snabb crawling
+
+# --- Sitemap-index ---
+Sitemap: https://clairvoyancemedium.github.io/Bantningskapsel-for-att-snabbt-ga-ner-i-vikt-utan-att-behova-avsta-fran-nagot.github.io/sitemap-index.xml
