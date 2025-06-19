@@ -1857,6 +1857,649 @@
     </p>
 </footer>
 
+     <!-- Tchat IA totalt komplett -->
+
+<title>AI-chatt med Spårning och Röstassistent</title>
+
+    <meta name="description" content="Andlig chatbot för avbesvärjelse, skydd och aurarensning av Frederick från ClairVoyanceMedium.com. Återfå vitalitet och sinnesro snabbt till ett enhetspris.">
+
+    <meta name="keywords" content="förtrollad, mardrömmar, avbesvärjelse, skydd, rening, energirensning, klärvoajans, aura, energi, hjälp, sömn, ritualer, andlig">
+
+    <style>
+        #chat-container {
+            position: fixed;
+            display: inline-block;
+            flex-direction: column;
+            z-index: 999999;
+            font-family: Arial, sans-serif;
+            transition: transform 0.2s;
+        }
+        #chat-bubble {
+            display: flex;
+            justify-content: flex-end;
+            cursor: move;
+        }
+        #chat-toggle {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(145deg, #FFB6C1, #FF69B4);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(255,105,180,0.7);
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            outline: none;
+        }
+        #chat-toggle:hover {
+            transform: scale(1.05);
+        }
+        #voice-toggle {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(145deg, #87CEEB, #5eb6d1);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(135,206,235,0.7);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            transition: transform 0.2s;
+            outline: none;
+        }
+        #voice-toggle:hover {
+            transform: scale(1.05);
+        }
+        #voice-toggle.disabled {
+            background: #808080;
+            box-shadow: 0 0 10px #808080;
+        }
+        #chat-box {
+            background: #111;
+            border-radius: 10px;
+            display: none;
+            flex-direction: column;
+            margin-top: 10px;
+            border: 2px solid #FF1493;
+            box-shadow: 0 0 10px #FF1493;
+            transition: all 0.3s ease;
+            max-height: 400px;
+        }
+        #chat-box.visible {
+            display: flex;
+        }
+        #chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            color: #fff;
+        }
+        #chat-messages p {
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        .bot-message {
+            text-align: left;
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-bottom: 0.8rem;
+            display: inline-block;
+            max-width: 80%;
+            border: 2px solid #FF69B4;
+            box-shadow: 0 0 8px #FF69B4;
+        }
+        .user-message {
+            text-align: right;
+            color: #ffd700;
+            margin-bottom: 0.8rem;
+            border: 2px solid #AED6F1;
+            box-shadow: 0 0 8px #AED6F1;
+            padding: 0.5rem;
+            border-radius: 5px;
+            display: inline-block;
+            max-width: 80%;
+        }
+        #chat-form {
+            display: flex;
+            border-top: 1px solid #333;
+            align-items: center;
+            padding: 0.5rem;
+        }
+        #chat-input {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            outline: none;
+            color: #333;
+            border-radius: 5px 0 0 5px;
+        }
+        #chat-send {
+            background: #87CEEB;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 0 5px 5px 0;
+            transition: background 0.2s;
+        }
+        #chat-send:hover {
+            background: #5eb6d1;
+        }
+        @media(max-width: 400px) {
+            #chat-container {
+                width: 90%;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div id="chat-container">
+    <div id="chat-bubble">
+        <button id="chat-toggle" aria-expanded="false" aria-label="Öppna chatt">💬</button>
+        <button id="voice-toggle" aria-label="Aktivera/Inaktivera röstassistent">🎤</button>
+    </div>
+    <div id="chat-box" role="region" aria-label="AI-chatt">
+        <div id="chat-messages" aria-live="polite"></div>
+        <form id="chat-form" aria-label="Inmatningsformulär för AI-chatt">
+            <input type="text" id="chat-input" placeholder="Ställ din fråga..." aria-label="Skriv ditt meddelande här" autocomplete="off">
+            <button type="submit" id="chat-send" aria-label="Skicka din fråga">➤</button>
+        </form>
+    </div>
+</div>
+
+
+<script nonce="xai-ultra2025">
+// Spårningsfunktion integrerad med GA4
+function trackClick(label, category = 'Chatt', value = null) {
+    console.log(`Spårning: Label=${label}, Category=${category}, Value=${value}`);
+    if (typeof gtag === 'function') {
+        gtag('event', label, { 'event_category': category, 'value': value });
+    }
+}
+
+// Översättningar och meddelanden
+const translations = {
+        greeting: "Välkommen till ClairVoyanceMedium.coms universum! Jag är ClairVoyanceGPT, din personliga guide, här för att hjälpa dig återfå vitalitet, smalhet och sinnesro genom våra Victory bantningslösningar samt alla våra andliga lösningar, för att avsevärt förbättra din fysiska och mentala komfort!",
+        thanks: "Med nöje, jag är här för att guida dig!",
+        goodbye: "Vi ses snart för att fortsätta din resa mot inre och yttre seger med Victory!",
+        notUnderstood: "Jag förstod inte din förfrågan. Kan du omformulera eller förtydliga din fråga?",
+        notUnderstoodAfter: "Det verkar som om vi har svårt att förstå varandra. Utforska våra Victory Bantningskapslar eller vårt personliga program för komplett välbefinnande. Andliga tjänster som spådom via e-post eller analys av din kärlekskompatibilitet är också tillgängliga för att stödja dig!",
+        grave: "Din situation verkar allvarlig. Agera nu med våra Victory-lösningar för att återfå balans och energi. Utforska våra program på webbplatsen!",
+        agree: "Perfekt, hur kan jag hjälpa dig ytterligare?"
+    };
+
+// Kunskapsbas med "Fördelar"
+const knowledgeBase = [
+    { question: "Trötthet | Trött | Slöhet | Utmattning | Svaghet | Förslitning", fullAnswer: "Denna överväldigande trötthet är ett verk av en mörk entitet som förtär din energi; anförtro reningen av din aura till Frederick från ClairVoyanceMedium.com för att återfå din vitalitet. Det kan vara ett tecken på en mörk entitet som dränerar din livsenergi dag efter dag. Frederick, expert på andlig rening, använder uråldriga ritualer för att rena din aura och driva bort dessa onda krafter. Genom att agera snabbt kan du återfå en strålande vitalitet och mental klarhet. Fördelar: återställd dynamik och återvunnen klarhet." },
+    { question: "Mardrömmar | Visioner | Nätter | Dröm | Sova | Drömmar", fullAnswer: "Dessa mardrömmar är inte enkla drömmar, de är resultatet av en ondskefull närvaro; låt Frederick från ClairVoyanceMedium.com driva bort dessa skuggor för att ge dig lugna nätter. De kan vara manifestationer av en ondskefull närvaro som infiltrerar ditt sinne under sömnen. Frederick, med 25 års erfarenhet, behärskar kraftfulla ritualer för att rena din viloplats. Du kommer att återfå lugna nätter och återhämtande sömn. Fördelar: regenererande vila och nattlig sinnesro." },
+    { question: "Kaos | Turbulens | Förvirring | Vanmakt | Virvel | Ångest", fullAnswer: "Kaoset som omger dig kommer från en störande förbannelse; låt Frederick från ClairVoyanceMedium.com återställa ordningen för att återställa din mentala balans. Förvirring och ångest signalerar en störande förbannelse. Frederick, specialist på avbesvärjelse, skingrar dessa negativa energier. Du kommer att återfå mental stabilitet och inre lugn som är oumbärliga. Fördelar: harmoni och inre lugn." },
+    { question: "Tyngd | Förtryck | Kvävning | Vikt | Ångest | Krossning", fullAnswer: "Denna tyngd som förtrycker din själ är en mörk kraft; vänd dig till Frederick från ClairVoyanceMedium.com för att befria dig och återfå lätthet. Denna känsla av kvävning är typisk för en mörk kraft som riktar sig mot din själ. Frederick bryter detta grepp med riktade ritualer. Du kommer att känna en återvunnen lätthet och förnyad energi. Fördelar: befrielse och återställd vitalitet." },
+    { question: "Förtrollning | Förbannelse | Besvärjelse | Charm | Magi | Häxkonst", fullAnswer: "Utmattning, otur och mardrömmar är resultatet av en förtrollning som håller dig fången; använd Fredericks ingripande från ClairVoyanceMedium.com för att bryta dessa ockulta band. Bestående trötthet och kronisk otur är tecken på en besvärjelse. Frederick utmärker sig i avbesvärjelse, använder kraftfulla ritualer för att befria dig. Du kommer att återfå lycka och bestående framgång. Fördelar: återvunnen välstånd och säker seger." },
+    { question: "Misslyckande | Motgång | Fall | Nederlag | Olycka | Förlust", fullAnswer: "Upprepade misslyckanden beror på en förtrollning som blockerar din väg; låt Frederick från ClairVoyanceMedium.com öppna din väg till framgång. Dessa motgångar är ingen slump: en förtrollning blockerar din framgång. Frederick lyfter dessa osynliga hinder, förvandlar din bana för en säker framsteg. Fördelar: seger och garanterad framsteg." },
+    { question: "Sömnlöshet | Rastlöshet | Vita nätter | Flyende | Vaka | Oro", fullAnswer: "Din sömnlöshet orsakas av en entitet som berövar dig vila; vänd dig till Frederick från ClairVoyanceMedium.com för att återställa din nattliga frid. Vita nätter och rastlöshet orsakas av en entitet som stör din vila. Frederick driver bort dessa influenser, garanterar dig återhämtande sömn. Fördelar: djup sömn och daglig energi." },
+    { question: "Smärta | Ont | Lidande | Brännande | Sorg | Plåga", fullAnswer: "Obefogade smärtor återspeglar en ockult attack på din kropp; låt Frederick från ClairVoyanceMedium.com skingra detta osynliga ont. Brännande och plågor signalerar en ockult attack. Frederick, med andliga helande ritualer, ger omedelbar lättnad. Fördelar: omedelbar lindring och återvunnen välbefinnande." },
+    { question: "Isolering | Ensamhet | Övergivenhet | Nöd | Tillbakadragenhet | Iskall", fullAnswer: "Isoleringen du känner kommer från en förtrollning som skiljer dig från andra; anförtro din försoning till Frederick från ClairVoyanceMedium.com för att återställa varma band. Denna ensamhet beror på en förtrollning som skär av dig från andra. Frederick bryter denna förbannelse, återför anslutning och socialt välbefinnande. Fördelar: återförening och social tillfredsställelse." },
+    { question: "Karriär | Arbete | Ambition | Stagnation | Blockering | Fiasko", fullAnswer: "Hindren i din karriär är tecken på en förbannelse som bromsar din ambition; låt Frederick från ClairVoyanceMedium.com frigöra din potential. Stagnation och misslyckanden beror på en förbannelse. Frederick frigör din potential, leder till framgång i din karriär. Fördelar: triumf och professionell fullbordan." },
+    { question: "Otur | Olycka | Slump | Pech | Olycksbringande | Katastrof", fullAnswer: "Oturen du upplever orsakas av en mörk förtrollning; vänd dig till Frederick från ClairVoyanceMedium.com för att attrahera lycka. Olyckor och katastrofer är ett verk av en förtrollning. Frederick renar din aura, attraherar lycka och öppnar nya möjligheter. Fördelar: möjligheter och återställd överflöd." },
+    { question: "Kärlek | Passion | Romantik | Bruten | Kärlekslös | Känslomässig", fullAnswer: "Bristen på kärlek beror på en förtrollning som låser ditt hjärta; låt Frederick från ClairVoyanceMedium.com återuppliva ditt kärleksliv. Brustna hjärtan eller känslomässig ensamhet orsakas av en förtrollning. Frederick lyfter denna barriär med sin sentimentala magi, ger ömhet och harmoni. Fördelar: tillgivenhet och känslomässig balans." },
+    { question: "Familj | Hem | Oenighet | Spänning | Bräcka | Konflikt", fullAnswer: "Familjespänningar är resultatet av en ockult skugga; anförtro harmoniseringen av dina relationer till Frederick från ClairVoyanceMedium.com. Familjekonflikter beror på en ockult skugga. Frederick renar ditt hem, återför enhet och sinnesro. Fördelar: enhet och familjefrid." },
+    { question: "Barn | Små | Avkomma | Son | Dotter | Ungar", fullAnswer: "Dina barns sorg återspeglar en mörk inverkan; vänd dig till Frederick från ClairVoyanceMedium.com för att rena deras aura. Sorg eller bekymmer hos barn signalerar en mörk inverkan. Frederick renar deras aura, återför glädje till familjen. Fördelar: lycka och familjens tillfredsställelse." },
+    { question: "Djur | Sällskap | Bestar | Nervositet | Störning | Instinkt", fullAnswer: "Dina djurs rastlöshet indikerar en mörk närvaro; låt Frederick från ClairVoyanceMedium.com återställa friden. Onormal nervositet signalerar en mörk närvaro. Frederick renar deras miljö, ger lugn till dina följeslagare. Fördelar: lugn och balans för dina följeslagare." },
+    { question: "Hus | Bostad | Hem | Atmosfär | Mörker | Rädsla", fullAnswer: "Den tryckande atmosfären i ditt hem är infekterad av svarta energier; låt Frederick från ClairVoyanceMedium.com rena din bostad. Rädsla och mörker signalerar svarta energier. Frederick förvandlar ditt hem till en ljus fristad. Fördelar: komfort och hemtrevnad." },
+    { question: "Bil | Fordon | Transport | Fel | Fara | Resa", fullAnswer: "Mystiska bilfel orsakas av en förtrollning; anförtro din bil till Frederick från ClairVoyanceMedium.com för säkerhet. Vägincidenter härstammar från en förtrollning. Frederick renar ditt fordon, garanterar lugn. Fördelar: lugn och vägskydd." },
+    { question: "Närvaro | Skugga | Spöke | Aura | Rysning | Inkräktning", fullAnswer: "Känslan av att bli följd är resultatet av en illvillig entitet; låt Frederick från ClairVoyanceMedium.com skydda dig. Rysningar signalerar en illvillig entitet. Frederick upprättar ett kraftfullt skydd, garanterar säkerhet. Fördelar: skydd och mental sinnesro." },
+    { question: "Ångest | Rädsla | Panik | Skräck | Fasa | Förskräckelse", fullAnswer: "Din ångest genereras av en destruktiv förtrollning; vänd dig till Frederick från ClairVoyanceMedium.com för att skapa fred. Panik och fasa genereras av en förtrollning. Frederick eliminerar dessa energier, återför djup ro. Fördelar: lugn och stärkt självförtroende." },
+    { question: "Irritabilitet | Vrede | Frustration | Raseri | Otålighet | Retlighet", fullAnswer: "Din irritation återspeglar en ockult krafts inverkan; använd Fredericks expertis från ClairVoyanceMedium.com för att återställa sinnesro. Vrede och frustration återspeglar en ockult kraft. Frederick återställer mildhet, ger emotionell frid. Fördelar: emotionell lugn och harmoni." },
+    { question: "Koncentration | Klarhet | Uppmärksamhet | Sorg | Oklarhet | Spridning", fullAnswer: "Ditt förvirrade sinne är offer för en störande förtrollning; låt Frederick från ClairVoyanceMedium.com centrera dina tankar. Mental oklarhet är målet för en förtrollning. Frederick eliminerar dessa störningar, garanterar ökad koncentration. Fördelar: optimerad uppmärksamhet och ökad effektivitet." },
+    { question: "Minnes | Glömska | Minne | Amnesi | Oordning | Hål", fullAnswer: "Minnesförlust härrör från en mörk besvärjelse; vänd dig till Frederick från ClairVoyanceMedium.com för att återställa din klarhet. Minnesluckor kommer från en besvärjelse. Frederick återställer ditt minne, stärker ditt livliga sinne. Fördelar: stärkt återkallande och mental skärpa." },
+    { question: "Släkt | Arv | Förfäder | Familje | Förflutet | Börda", fullAnswer: "Den förbannade släkten väger tungt på ditt arv; lita på Frederick från ClairVoyanceMedium.com för att befria dig. En generationsbörda kan tynga din släkt. Frederick bryter denna cykel, öppnar för familjefrihet. Fördelar: familjebefrielse och personlig förnyelse." },
+    { question: "Begränsning | Skruv | Kvävning | Tryck | Yrsel | Fångenskap", fullAnswer: "Förtrycket du upplever är en svart kraft; låt Frederick från ClairVoyanceMedium.com befria dig. Känslan av ett skruvstäd är en svart kraft. Frederick befriar dig med kraftfulla ritualer, ger lätthet. Fördelar: frihet och återställd styrka." },
+    { question: "Lidande | Sorg | Smärta | Elände | Sår | Pina", fullAnswer: "Det lidande du upplever härrör från en ockult attack; vänd dig till Frederick från ClairVoyanceMedium.com för att hela dig. Sorg och smärta är en ockult attack. Frederick renar din varelse, ger snabb läkning. Fördelar: snabb återhämtning och bestående lindring." },
+    { question: "Avkoppling | Tomhet | Separation | Främlingskap | Intighet | Avgrund", fullAnswer: "Den inre tomheten är resultatet av en isolerande förtrollning; låt Frederick från ClairVoyanceMedium.com återansluta dig till din essens. Denna frånkoppling orsakas av en förtrollning. Frederick återansluter dig, ger inre enhet. Fördelar: inre sammanhang och återvunnen balans." },
+    { question: "Vibration | Energi | Glorior | Utmattning | Demon | Mörker", fullAnswer: "Din nedsmutsade aura förorenas av mörkret; anförtro dess rening till Frederick från ClairVoyanceMedium.com för att avslöja ljuset. En stördd aura signalerar mörk förorening. Frederick driver bort detta mörker, ger positiv energi. Fördelar: positiv vitalitet och återupplivad glans." },
+    { question: "Projekt | Ambitioner | Planer | Stagnation | Dröm | Hinder", fullAnswer: "Dina ambitioner hindras av en ondskefull förtrollning; låt Frederick från ClairVoyanceMedium.com frigöra din potential. Hindren för dina projekt beror på en förtrollning. Frederick eliminerar dessa blockeringar, aktiverar framgångsrika projekt. Fördelar: framgång och kreativ framdrift." },
+    { question: "Stress | Nervositet | Utmattning | Överbelastning | Rastlöshet | Plåga", fullAnswer: "Stressen som tynger dig är ett grepp av en ockult kraft; vänd dig till Frederick från ClairVoyanceMedium.com för att lugna dina spänningar. Stress och nervositet är en ockult kraft. Frederick lugnar dessa spänningar, ger sinnesro. Fördelar: lugn och mental frid." },
+    { question: "Öde | Väg | Mörker | Mening | Osäkerhet | Ödesmakt", fullAnswer: "Ditt öde är täckt av en förtrollning som mörklägger ditt liv; låt Frederick från ClairVoyanceMedium.com lysa upp din väg. Ett täckt öde signalerar en förtrollning. Frederick skingrar dessa skuggor, guidar mot en strålande förnyelse. Fördelar: hopp och personlig förvandling." },
+    { question: "Övervikt | Kilo | Silhuett | Smalhet | Fett | Vikt", fullAnswer: "Ditt överflödiga vikt hämmar ditt självförtroende; anförtro din transformation till Victory Bantningskapslar från ClairVoyanceMedium.com. Denna metaboliska obalans kan lösas naturligt. Kapslarna baserade på marint kitin och det Personliga Bantningsprogrammet formar din silhuett. Förlora upp till 12 kilo på 2 månader med naturliga ingredienser. Fördelar: formad silhuett och ökad energi." },
+    { question: "Uppblåsthet | Obekväm | Mage | Smalhet | Kvarhållande | Matspjälkning", fullAnswer: "Denna buktryngd stör ditt välbefinnande; välj Victory Bantningskapslar från ClairVoyanceMedium.com. Uppblåsthet signalerar en långsammare metabolism. Kapslarna och det Personliga Bantningsprogrammet minskar kvarhållandet och formar din mage. Återfå lätthet inom 1 vecka. Fördelar: platt mage och återvunnen komfort." },
+    { question: "Plateau | Smalhet | Motstånd | Kilo | Stillastående | Silhuett", fullAnswer: "Ditt bantningsplateau blockerar din framgång; lita på Victory Bantningskapslar från ClairVoyanceMedium.com. Denna stagnation är ofta metabolisk. Kapslarna och det Personliga Bantningsprogrammet låser upp din metabolism. Förlora 8-12 kilo på 2 månader bestående. Fördelar: bestående resultat och återvunnet självförtroende." },
+    { question: "Sug | Aptit | Smalhet | Kontroll | Anfäktningar | Fett", fullAnswer: "Dina sug stör din viktminskning; lita på Victory Bantningskapslar från ClairVoyanceMedium.com. Okontrollerad aptit återspeglar en hormonell obalans. Kapslarna och det Personliga Bantningsprogrammet reglerar din metabolism. Ta kontroll över din vikt idag. Fördelar: kontroll och formad silhuett." },
+    { question: "Balans | Kropp | Formning | Vitalitet | Harmoni | Mängd | Dosering", fullAnswer: "Din kropp förtjänar att nå sin naturliga balans. Upptäck Victory Kapslar från ClairVoyanceMedium.com, formulerade med effektivt doserat marint kitin för bestående formning. Med en dosering anpassad till din metabolism och en optimal mängd, återfinn din välbefinnande på 2 månader samtidigt som du ökar din vitalitet. För en personlig approach, gör IMC-testet på vår webbplats nu för att bestämma den idealiska doseringen och det skräddarsydda programmet för dig. Balansera din kropp och återfå självförtroende!" },
+    { question: "Kontakt | Kontakta | Samtal | Meddelande | E-post | Nå | Kommunikation", fullAnswer: "Kontakta Frederick nu via e-post på följande adress: contact.clairvoyancemedium@gmail.com. Vårt team svarar snabbt för att organisera en e-postkonsultation eller en kraftfull ritual, vilket garanterar en omedelbar anpassning till dina behov. Fördelar: snabbhet och omedelbar transformation." },
+    { question: "Vikt | Smalhet | Kropp | Kilo | Förvandling | Mage", fullAnswer: "Dina extra kilo dämpar din silhuett; förvandla dig med Victory Bantningskapslar från ClairVoyanceMedium.com. Denna övervikt återspeglar en långsammare metabolism. Kapslarna och det Personliga Bantningsprogrammet formar din kropp. Förlora upp till 12 kilo på 2 månader. Fördelar: formad kropp och självförtroende." },
+    { question: "Kvarhållande | Smalhet | Svullnad | Tyngd | Metabolism | Matspjälkning", fullAnswer: "Din obehagliga matspjälkning hämmar ditt välbefinnande; välj Victory Bantningskapslar från ClairVoyanceMedium.com. Uppblåsthet signalerar en metabolisk obalans. Kapslarna och det Personliga Bantningsprogrammet lindrar din matspjälkning. Återfå lätthet inom 7 dagar. Fördelar: flytande matspjälkning och formad silhuett." },
+    { question: "Relationer | Band | Vänskap | Konflikt | Distans | Brytning", fullAnswer: "Brutna relationer är resultatet av en destruktiv förtrollning; låt Frederick från ClairVoyanceMedium.com reparera dina anslutningar. Konflikter med dina nära beror på en förtrollning. Frederick renar dessa band, återför försoning. Fördelar: återförening och social enhet." },
+    { question: "Finanser | Pengar | Rikedom | Fattigdom | Flöde | Skuld", fullAnswer: "Ekonomiska svårigheter härrör från en förtrollning som blockerar överflöd; anförtro Frederick från ClairVoyanceMedium.com uppgiften att återställa rikedom. Skulder orsakas av en förtrollning. Frederick lyfter dessa hinder, ger välstånd. Fördelar: överflöd och ekonomisk balans." },
+    { question: "Framtid | Hopp | Kommande | Osäkerhet | Katastrof | Hot", fullAnswer: "Din framtid hotas av en mörk förtrollning; låt Frederick från ClairVoyanceMedium.com lysa upp din väg. Osäkerhet inför framtiden beror på en förtrollning. Frederick skingrar dessa skuggor, leder till ett lovande framtid. Fördelar: självförtroende och förnyade horisonter." },
+    { question: "Muskler | Smärta | Stelhet | Trötthet | Spasm | Utmattning", fullAnswer: "Muskelsmärtor vittnar om en förtrollning som försvagar din styrka; vänd dig till Frederick från ClairVoyanceMedium.com för att återställa din energi. Smärtor och stelhet är en förtrollning. Frederick återställer din styrka, ger smidighet. Fördelar: flexibilitet och återställd energi." },
+    { question: "Hallucinationer | Uppenbarelser | Högervildningar | Mörka | Illusion | Spöke", fullAnswer: "Visioner och hallucinationer är resultatet av ockulta attacker; vänd dig till Frederick från ClairVoyanceMedium.com för att skingra dessa illusioner. Uppenbarelser är ockulta attacker. Frederick renar ditt sinne, ger klarhet. Fördelar: klarhet och perceptuell frid." },
+    { question: "Attack | Aggression | Angrepp | Fientlighet | Invasion | Ondskefullhet", fullAnswer: "De aggressioner du upplever utgår från en fientlig kraft; vänd dig till Frederick från ClairVoyanceMedium.com för att neutralisera dessa hot. Energihot är en fientlig kraft. Frederick säkerställer din säkerhet. Fördelar: skydd och inre frid." },
+    { question: "Nödsituation | Kris | Omedelbarhet | Haste | Alarm | Fara", fullAnswer: "Brådskande behov mot hotande skuggor kräver handling; vänd dig till Frederick från ClairVoyanceMedium.com för att säkra ditt öde. Kris och fara kräver snabb ingripande. Frederick stoppar dessa hot, säkerställer sinnesro. Fördelar: snabb ingripande och garanterad säkerhet." },
+    { question: "Stöd | Vägledning | Assistans | Hjälp | Bekymmer | Skydd", fullAnswer: "Stödet du behöver säkerställs av Frederick från ClairVoyanceMedium.com; dra nytta av konstant skydd. Inför skuggorna erbjuder Frederick expertvägledning, upprätthåller din säkerhet. Fördelar: skydd och personlig uppföljning." },
+    { question: "Rykte | Trovärdighet | Renommé | Tillförlitlighet | Prestige | Förtroende", fullAnswer: "Med 25 års framgång är Frederick från ClairVoyanceMedium.com en sköld mot mörkret; lita på honom för att förvandla ditt liv. Hans erfarenhet gör honom till ett säkert val, garanterar konkreta resultat. Fördelar: beprövad expertis och konkreta resultat." },
+    { question: "Analys | Diagnos | Session | Utvärdering | Ritual | Sammanträde", fullAnswer: "En konsultation med Frederick från ClairVoyanceMedium.com renar din aura; engagera dig för en transformation. Denna rening förbereder din frälsning, ger omedelbar klarhet och förnyelse. Fördelar: omedelbar klarhet och återupplivning." },
+    { question: "Metoder | Tekniker | Praktiker | Hemligheter | Kunskap | Riter", fullAnswer: "Fredericks ritualer från ClairVoyanceMedium.com renar din aura på 4 dagar; välj denna beprövade metod. Dessa uråldriga ritualer driver bort skuggorna, garanterar snabb förvandling. Fördelar: effektivitet och snabb återupplivning." },
+    { question: "Konfidentialitet | Hemlighet | Diskretion | Säkerhet | Privatliv | Vakt", fullAnswer: "Fredericks diskretion från ClairVoyanceMedium.com skyddar din själ; anförtro honom dina hemligheter för helande. Frederick garanterar total integritet, återför förtroende. Fördelar: sinnesro och garanterat förtroende." },
+    { question: "Priser | Kostnad | Prissättning | kostar | Försändelse | Pris | Värde | Betalning", fullAnswer: "Ett förmånligt pris erbjuds för att rena din aura eller forma din silhuett; investera för en radikal förändring. Från 6,00€ för spådom via e-post eller 19,00€ för Victory Bantningskapslar, denna investering erbjuder ovärderligt värde. Global leverans erbjuds nu utan minimiköp. Fördelar: kontrollerat pris och värdefullt värde." },
+    { question: "Framgång | Seger | Triumf | Välstånd | Fullbordan | Vinst", fullAnswer: "Frederick från ClairVoyanceMedium.com förvandlar liv mot framgång; engagera dig för en garanterad seger. Frederick leder till framgång i projekt eller karriär, säkerställer välstånd. Fördelar: överflöd och personlig tillfredsställelse." },
+    { question: "Skräck | Rysning | Mörk | Svart | Natt | Ångest", fullAnswer: "Nattliga fasor är resultatet av en ondskefull förtrollning; vänd dig till Frederick från ClairVoyanceMedium.com för att skapa säkerhet. Skräck och rysningar är en förtrollning som stör dina nätter. Frederick renar din miljö, säkerställer frid. Fördelar: lugn och garanterad frid." },
+    { question: "Förtvivlan | Sorg | Sorg | Melankoli | Förlust | Sorg", fullAnswer: "Förtvivlan orsakas av en ockult skugga; låt Frederick från ClairVoyanceMedium.com återuppliva ljuset. Djup sorg är en skugga som släcker ditt ljus. Frederick återger hopp, erbjuder emotionell förnyelse. Fördelar: hopp och emotionell förnyelse." },
+    { question: "Kall | Skakning | Djup | Kall | Iskall | Panik", fullAnswer: "Rädslan markerad av en iskall kyla är en paralyserande förtrollning; vänd dig till Frederick från ClairVoyanceMedium.com för att återställa din värme. Rysningar och kyla är en förtrollning. Frederick återställer inre värme, ger tröst. Fördelar: avslappning och återvunnet självförtroende." },
+    { question: "Ja | Okej | ok | Jag godkänner | Validerad | Pren | Självklart", fullAnswer: "🙂" },
+    { question: "Svart | Slöja | Mörk | Evig | Skymning | Avgrund", fullAnswer: "Mörkret som omger dig är en ondskefull förtrollning; låt Frederick från ClairVoyanceMedium.com återföra ljuset. Mörker är en förtrollning som mörklägger ditt öde. Frederick renar din väg, ger belysning. Fördelar: klarhet och garanterad återupplivning." },
+    { question: "Ödslighet | Avskild | Total | Isolering | Övergivenhet | Intighet", fullAnswer: "Ensamt är en förbannelse av mörkret; vänd dig till Frederick från ClairVoyanceMedium.com för att återansluta. Ödslighet är en förbannelse. Frederick återställer väsentliga band, ger social harmoni. Fördelar: återförening och social enhet." },
+    { question: "Svek | Falskhet | Otrohet | Lojalitet | Besvikelse | Dubbelhet", fullAnswer: "Svek är resultatet av en destruktiv förtrollning; låt Frederick från ClairVoyanceMedium.com återställa lojaliteten. Besvikelse är en förtrollning som försvagar dina relationer. Frederick skyddar dina band, ger förtroende. Fördelar: självsäkerhet och återställd trohet." },
+    { question: "Mummel | Viskningar | Röst | Eko | Ljud | Andetag", fullAnswer: "Oroande viskningar är resultatet av en subtil förtrollning; låt Frederick från ClairVoyanceMedium.com skapa tystnad. Spökljud är en störande förtrollning. Frederick renar utrymmet, ger inre frid. Fördelar: lugn och optimerad uppmärksamhet." },
+    { question: "Gråhet | Mörk | Dyster | Svarthet | Dyster | Olycksbådande", fullAnswer: "Den omgivande dysterheten är en tyngande förbannelse; vänd dig till Frederick från ClairVoyanceMedium.com för att avslöja ditt ljus. Gråhet är en förbannelse som mörklägger ditt liv. Frederick återställer din glans, erbjuder förnyelse. Fördelar: återupplivning och återvunnen glans." },
+    { question: "Skepticism | Misstänksamhet | Kall | Misstro | Frågande | Tvivel", fullAnswer: "Tvivel sås av en mörk förtrollning; låt Frederick från ClairVoyanceMedium.com klargöra dina tankar. Misstro är en förtrollning som förvirrar din syn. Frederick skingrar dessa influenser, ger självsäkerhet. Fördelar: förtroende och mental klarhet." },
+    { question: "Hej då | hejdå | Vi ses | Adjö | Ciao | Jag kommer tillbaka | Trevlig dag | God kväll", fullAnswer: "Vi ses snart i det eviga ljuset! Frederick, som har hjälpt tusentals själar, omger dig med sin konstanta vaksamhet. Du är inte längre ensam mot skuggorna, för vet att hans kraft överskrider allt mörker." },
+    { question: "Oenighet | Konflikt | Splittring | Gräl | Brytning | Disharmoni", fullAnswer: "Disharmoni orsakas av en destruktiv förtrollning; låt Frederick från ClairVoyanceMedium.com återförena dina band. Gräl är en förtrollning. Frederick renar dessa relationer, återställer harmoni. Fördelar: enhet och social harmoni." },
+    { question: "Orättvisa | Ojämlikhet | Fördom | Partiskhet | Fel | Nackdel", fullAnswer: "Orättvisa härrör från en partisk förtrollning; låt Frederick från ClairVoyanceMedium.com återställa rättvisan. Nackdelar är en förtrollning. Frederick återställer rättvisa, leder till en harmonisk framtid. Fördelar: rättrådighet och personlig harmoni." },
+    { question: "Skymning | Hjärta | Inre | Tyst | Tår | Lidande", fullAnswer: "Den djupa sorgen beror på en ockult skugga; vänd dig till Frederick från ClairVoyanceMedium.com för att trösta ditt hjärta. Tårar är en skugga som hindrar ditt hjärta. Frederick återställer ljuset, ger tröst. Fördelar: lindring och emotionell förnyelse." },
+    { question: "Plåga | Prövning | Katastrof | Omvälvning | Kris | Chock", fullAnswer: "Krisen orsakas av en ockult attack; vänd dig till Frederick från ClairVoyanceMedium.com för att återställa ordningen. Plåga är en ockult attack. Frederick erbjuder en omedelbar återfödelse, återställer stabilitet. Fördelar: återställande och återställd balans." },
+    { question: "Vem | Frederic | Frederick | Erfarenhet | Expertis | Avbesvärjare", fullAnswer: "Frederick från ClairVoyanceMedium.com är en expert formad av 25 års erfarenhet; hans behärskning av osynliga krafter guidar mot framgång. Hans skärpta färdigheter förvandlar karriärer och ambitioner med en djup insikt. Fördelar: beprövad expertis och bestående förvandling." },
+    { question: "Dynamik | Energi | Inre | Kraft | Framdrift | Styrka", fullAnswer: "Försvagningen av din styrka beror på en dränerande förtrollning; vänd dig till Frederick från ClairVoyanceMedium.com för att återuppliva din kraft. Förlust av framdrift är en förtrollning. Frederick väcker din dynamik, ger bestående kraft. Fördelar: styrka och återvunnen energi." },
+    { question: "Flamma | Hängivenhet | Livlig | Glans | Värme | Passion", fullAnswer: "Den flackande passionen beror på en kvävande förtrollning; låt Frederick från ClairVoyanceMedium.com återuppliva din flamma. Slocknat inre eld är en förtrollning. Frederick värmer din själ, frigör kreativ energi. Fördelar: inspiration och kreativ vitalitet." },
+    { question: "Spådom | E-post | Förutsägelse | Öde | Uppenbarelse | Vägledning", fullAnswer: "Din framtid är täckt av osäkra skuggor; anförtro dig åt Fredericks spådom via e-post på ClairVoyanceMedium.com för att lysa upp din väg. Tvivel om din framtid finner tydliga svar. Frederick, med 25 års expertis, erbjuder dig precisa förutsägelser via e-post. Från 6,00€, få personlig vägledning. Fördelar: klarhet och förtroende för din framtid." },
+    { question: "Konsultation | E-post | Vision | Profetia | Framtid | Råd", fullAnswer: "Osäkerheterna om morgondagen fyller dig med ångest; välj en e-postkonsultation med Frederick från ClairVoyanceMedium.com för kraftfulla uppenbarelser. Frågor om din framtid förtjänar tydliga svar. Frederick guidar dig med precisa visioner skickade via e-post. En session från 6,00€ förvandlar din osäkerhet till självsäkerhet. Fördelar: klarhet och upplysta beslut." },
+    { question: "Orakel | E-post | Spådomskonst | Framtid | Intuition | Klargöring", fullAnswer: "Din väg är mörklagd av tvivel; vänd dig till Fredericks spådom via e-post på ClairVoyanceMedium.com för divinatoriska svar. Osäkerheten blockerar dina val. Frederick, mästare i spådomskonst, skickar dig intuitiva förutsägelser via e-post. Från 6,00€, upptäck din framtid. Fördelar: stärkt intuition och återvunnen klarhet." },
+    { question: "Förutsägelse | E-post | Svar | Väg | Beslut | Sanning", fullAnswer: "Frågor om din framtid paralyserar dig; välj Fredericks spådom via e-post på ClairVoyanceMedium.com för avslöjade sanningar. Obeslutsamhet hämmar din framdrift. Frederick erbjuder dig snabba och precisa svar via e-post. Från 6,00€, fatta rätt beslut. Fördelar: självsäkerhet och upplyst väg." },
+    { question: "Vägledning | E-post | Andlig | Öde | Råd | Ljus", fullAnswer: "Din själ söker en tydlig riktning; lita på Fredericks spådom via e-post på ClairVoyanceMedium.com för andlig vägledning. Andliga tvivel mörklägger ditt öde. Frederick skickar dig djupa råd via e-post. Från 6,00€, hitta ljuset. Fördelar: inre frid och säker riktning." },
+    { question: "Smalhet | Balans | Kropp | Formning | Vitalitet | Harmoni", fullAnswer: "Din kropp strävar efter balans; förvandla dig med Victory Bantningskapslar från ClairVoyanceMedium.com. En obalanserad metabolism hämmar ditt välbefinnande. Kapslarna baserade på marint kitin och det Personliga Bantningsprogrammet balanserar din kropp. Förlora 8-12 kilo på 2 månader naturligt. Fördelar: vitalitet och formad silhuett." },
+    { question: "Silhuett | Smalhet | Form | Kilo | Estetik | Välbefinnande", fullAnswer: "Din silhuett saknar glans; välj Victory Bantningskapslar från ClairVoyanceMedium.com för att stråla. Extra kilo dämpar din estetik. Kapslarna och det Personliga Bantningsprogrammet formar din figur. Förlora upp till 12 kilo på 2 månader. Fördelar: återvunnen skönhet och ökad självkänsla." },
+    { question: "Banta | Metabolism | Förlust | Fett | Energi | Kropp", fullAnswer: "Din metabolism saktar ner din viktminskning; lita på Victory Bantningskapslar från ClairVoyanceMedium.com. Kvarvarande fett hämmar din energi. Kapslarna och det Personliga Bantningsprogrammet ökar din metabolism. Förlora 8-12 kilo på 2 månader. Fördelar: återvunnen energi och formad kropp." },
+    { question: "Mage | Smalhet | Svullnad | Formning | Komfort | Vikt", fullAnswer: "Din uppblåsta mage försämrar din komfort; välj Victory Bantningskapslar från ClairVoyanceMedium.com för att forma den. Svullnaden återspeglar en matspjälkningsobalans. Kapslarna och det Personliga Bantningsprogrammet minskar detta obehag. Återfå en platt mage inom 7 dagar. Fördelar: komfort och elegant silhuett." },
+    { question: "Inte alls | Nej", fullAnswer: "?" },
+    { question: "Smalhet | Aptit | Reglering | Kilo | Kontroll | Välbefinnande", fullAnswer: "Din överdrivna aptit hämmar din smalhet; välj Victory Bantningskapslar från ClairVoyanceMedium.com. Sugsignalerna indikerar en hormonell obalans. Kapslarna och det Personliga Bantningsprogrammet reglerar din aptit. Förlora upp till 12 kilo på 2 månader. Fördelar: återvunnen kontroll och välbefinnande." },
+    { question: "Kompatibilitet | Kärlek | Par | Harmoni | Relation | Öde", fullAnswer: "Tvivel om ditt förhållande mörklägger ditt hjärta; anförtro dig åt Frederick från ClairVoyanceMedium.com för en avslöjad kärlekskompatibilitet. Kärleksspänningar signalerar en feljustering. Frederick, expert i kärleksmagi, analyserar din kompatibilitet. Återfå harmoni på 4 dagar. Fördelar: stärkt kärlek och bestående union." },
+    { question: "Sentimental | Magi | Hjärta | Passion | Återkomst | Känsla", fullAnswer: "Ditt brustna hjärta längtar efter passion; vänd dig till Frederick från ClairVoyanceMedium.com för en kärleksåterkomst. Kärleksförlust är en reversibel förtrollning. Frederick använder kärleksmagi för att återuppliva kärleken. Återfå din älskade på 4 dagar. Fördelar: återupplivad passion och känslomässig lycka." },
+    { question: "Skydd | Sköld | Ont | Energier | Säkerhet | Ande", fullAnswer: "Negativa energier hotar din ande; vänd dig till Frederick från ClairVoyanceMedium.com för en skyddande sköld. Mörka influenser stör din frid. Frederick upprättar ett kraftfullt andligt skydd. Lev i säkerhet från idag. Fördelar: sinnesro och garanterat skydd." },
+    { question: "Rening | Aura | Rengöring | Skugga | Glans | Själ", fullAnswer: "Din aura är nedsmutsad av skuggor; anförtro dess rening till Frederick från ClairVoyanceMedium.com för att återfå din glans. En förorenad aura dränerar din energi. Frederick använder uråldriga ritualer för att rena din själ. Återfå ditt ljus på 4 dagar. Fördelar: andlig glans och vitalitet." },
+    { question: "Lycka | Tur | Möjlighet | Framgång | Välstånd | Öde", fullAnswer: "Oturen blockerar dina möjligheter; vänd dig till Frederick från ClairVoyanceMedium.com för att attrahera rikedom. En mörk förtrollning hämmar din framgång. Frederick renar din väg, öppnar välståndets dörrar. Grip din chans nu. Fördelar: överflöd och garanterad triumf." },
+    { question: "Spådom | Uppenbarelse | E-post | Mysterium | Sanning | Intuition", fullAnswer: "Mysterierna om din framtid undflyr dig; välj Fredericks spådom via e-post på ClairVoyanceMedium.com för avslöjade sanningar. Osäkerheter blockerar din intuition. Frederick skickar dig klara uppenbarelser via e-post. Från 6,00€, lys upp ditt öde. Fördelar: sanning och återvunnen självsäkerhet." },
+    { question: "E-post | Förutsägelse | Råd | Framtid | Val | Klarhet", fullAnswer: "Dina framtida val är oklara; lita på Fredericks spådom via e-post på ClairVoyanceMedium.com för omedelbar klarhet. Obeslutsamhet hämmar dina projekt. Frederick erbjuder dig precisa råd via e-post. Från 6,00€, gå framåt med självförtroende. Fördelar: klarhet och säkra beslut." },
+    { question: "Smalhet | Avgiftning | Kropp | Eliminering | Toxiner | Lätthet", fullAnswer: "Din kropp är tyngd av toxiner; välj Victory Bantningskapslar från ClairVoyanceMedium.com för en naturlig avgiftning. Toxiner hämmar din smalhet. Kapslarna och det Personliga Bantningsprogrammet eliminerar orenheter. Återfå lätthet inom 7 dagar. Fördelar: renad kropp och formad silhuett." },
+    { question: "Smalhet | Energi | Förlust | Kilo | Dynamik | Form", fullAnswer: "Dina extra kilo dränerar din energi; förvandla dig med Victory Bantningskapslar från ClairVoyanceMedium.com. En långsam metabolism hämmar din form. Kapslarna och det Personliga Bantningsprogrammet ökar din viktminskning. Förlora 8-12 kilo på 2 månader. Fördelar: dynamik och formad kropp." },
+    { question: "Smalhet | Självförtroende | Silhuett | Vikt | Glans | Skönhet", fullAnswer: "Din brist på självförtroende kommer från din silhuett; lita på Victory Bantningskapslar från ClairVoyanceMedium.com. Kilo dämpar din glans. Kapslarna och det Personliga Bantningsprogrammet formar din kropp. Förlora upp till 12 kilo på 2 månader. Fördelar: återvunnen skönhet och självsäkerhet." },
+    { question: "Spådom | E-post | Kärlek | Förutsägelse | Hjärta | Relation", fullAnswer: "Ditt hjärta tvivlar på kärleken; välj Fredericks spådom via e-post på ClairVoyanceMedium.com för tydliga svar. Kärleksosäkerheter förvirrar ditt sinne. Frederick skickar dig precisa förutsägelser via e-post. Från 6,00€, lys upp din kärleksframtid. Fördelar: klarhet och kärleksharmoni." },
+    { question: "E-post | Vägledning | Karriär | Framtid | Framgång | Råd", fullAnswer: "Din karriär är osäker; välj Fredericks spådom via e-post på ClairVoyanceMedium.com för precisa råd. Tvivel hämmar din framgång. Frederick erbjuder dig strategiska råd via e-post. Från 6,00€, spår din professionella väg. Fördelar: framgång och garanterad självsäkerhet." },
+    { question: "Smalhet | Mage | Formning | Kilo | Komfort | Harmoni", fullAnswer: "Din buktryngd försämrar ditt välbefinnande; lita på Victory Bantningskapslar från ClairVoyanceMedium.com för att forma den. Buktens kilo stör din harmoni. Kapslarna och det Personliga Bantningsprogrammet formar din mage. Återfå komfort inom 7 dagar. Fördelar: platt mage och välbefinnande." },
+    { question: "Bantning | Vikt | Kalorier | Balans | Kropp | Förlust | Vitalitet", fullAnswer: "Din vikt obalanserar din kropp; välj Victory Bantningskapslar från ClairVoyanceMedium.com för en förvandling. En långsam metabolism hämmar din vitalitet. Kapslarna och det Personliga Bantningsprogrammet främjar viktminskning. Förlora 8-12 kilo på 2 månader. Fördelar: balans och återvunnen energi." },
+    { question: "Spådom | E-post | Finanser | Förutsägelse | Rikedom | Framtid", fullAnswer: "Dina finanser är osäkra; vänd dig till Fredericks spådom via e-post på ClairVoyanceMedium.com för tydliga förutsägelser. Finansiella tvivel blockerar ditt välstånd. Frederick skickar dig uppenbarelser via e-post. Från 6,00€, säkra din ekonomiska framtid. Fördelar: klarhet och garanterat välstånd." }
+];
+
+// Förberedelse av kunskapsbasen
+function removeAccents(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function levenshteinDistance(a, b) {
+    const matrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));
+    for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
+    for (let j = 0; j <= b.length; j++) matrix[j][0] = j;
+    for (let j = 1; j <= b.length; j++) {
+        for (let i = 1; i <= a.length; i++) {
+            const indicator = a[i - 1] === b[j - 1] ? 0 : 1;
+            matrix[j][i] = Math.min(
+                matrix[j][i - 1] + 1,
+                matrix[j - 1][i] + 1,
+                matrix[j - 1][i - 1] + indicator
+            );
+        }
+    }
+    return matrix[b.length][a.length];
+}
+
+function phoneticNormalize(str) {
+    return removeAccents(str)
+        .replace(/ph/g, "f")
+        .replace(/k/g, "c")
+        .replace(/qu/g, "k")
+        .replace(/ss/g, "s")
+        .replace(/ée/g, "e")
+        .replace(/ai/g, "e");
+}
+
+const processedKnowledgeBase = knowledgeBase.map(item => ({
+    question: item.question.toLowerCase().split("|").map(word => phoneticNormalize(removeAccents(word.trim()))).filter(word => word.length > 0),
+    fullAnswer: item.fullAnswer
+}));
+
+let nonUnderstoodCount = 0;
+let conversationHistory = [];
+
+function cleanInput(input) {
+    return input.toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/).map(word => phoneticNormalize(removeAccents(word))).filter(word => word.length > 0);
+}
+
+function findBestMatch(userInput) {
+    const userWords = cleanInput(userInput);
+    let bestMatch = null, maxScore = 0;
+
+    processedKnowledgeBase.forEach(item => {
+        let score = 0;
+        userWords.forEach(userWord => {
+            item.question.forEach(kbWord => {
+                const distance = levenshteinDistance(userWord, kbWord);
+                const similarity = 1 - distance / Math.max(userWord.length, kbWord.length);
+                if (similarity >= 0.6) {
+                    score += similarity;
+                }
+            });
+        });
+        if (score > maxScore) {
+            maxScore = score;
+            bestMatch = item;
+        }
+    });
+
+    return maxScore > 0 ? bestMatch : null;
+}
+
+// Funktion getResponse korrigerad för "hej då" och "kontakt"
+function getResponse(userMsg) {
+    const lowerMsg = userMsg.toLowerCase().trim();
+    conversationHistory.push(lowerMsg);
+
+    // Prioriterad kontroll för "hej då" och dess varianter
+    const goodbyeTriggers = ["hej då", "hejdå", "vi ses", "trevlig dag", "adjö", "bybye", "bye"];
+    if (goodbyeTriggers.some(phrase => lowerMsg === phrase || lowerMsg.startsWith(phrase))) {
+        nonUnderstoodCount = 0;
+        trackClick("Hejdå", "Interaktion", 0);
+        return translations.goodbye;
+    } 
+    // Prioriterad kontroll för "kontakt"
+    else if (lowerMsg === "kontakt" || lowerMsg.startsWith("kontakt")) {
+        nonUnderstoodCount = 0;
+        trackClick("Kontaktförfrågan", "Interaktion", 0);
+        return "Kontakta Frederick nu via e-post: contact.clairvoyancemedium@gmail.com. Vårt team svarar mycket snabbt och garanterar en transformation anpassad till dina behov. Fördelar: snabbhet och självförbättring.";
+    } 
+    // Andra grundläggande svar
+    else if (lowerMsg === "hej") {
+        nonUnderstoodCount = 0;
+        trackClick("Hälsning", "Interaktion", 0);
+        return translations.greeting;
+    } else if (lowerMsg === "tack" || lowerMsg === "jag tackar" || lowerMsg === "det är väldigt snällt" || lowerMsg === "tack så mycket") {
+        nonUnderstoodCount = 0;
+        trackClick("Tack", "Interaktion", 0);
+        return translations.thanks;
+    } else if (["det är allvarligt", "allvarligt", "det är verkligen allvarligt"].includes(lowerMsg)) {
+        nonUnderstoodCount = 0;
+        trackClick("Allvarligt", "Interaktion", 0);
+        return translations.grave;
+    } else if (["okej", "ja", "japp", "ok"].includes(lowerMsg)) {
+        nonUnderstoodCount = 0;
+        return translations.agree;
+    } 
+    // Sök i kunskapsbasen
+    else {
+        const matchedItem = findBestMatch(userMsg);
+        if (matchedItem) {
+            nonUnderstoodCount = 0;
+            trackClick("SvarGiven", "Interaktion", 0);
+            return matchedItem.fullAnswer;
+        } else {
+            nonUnderstoodCount++;
+            trackClick("InteFörstått", "Interaktion", nonUnderstoodCount);
+            if (nonUnderstoodCount < 3) return translations.notUnderstood;
+            nonUnderstoodCount = 0;
+            return translations.notUnderstoodAfter;
+        }
+    }
+}
+
+// Insamling av webbplatsens innehåll vid laddning
+const siteContent = [];
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('h1, h2, h3, p, li').forEach(element => {
+        const text = element.textContent.trim().toLowerCase();
+        if (text) siteContent.push({ text: cleanInput(text), raw: element.textContent });
+    });
+    document.querySelectorAll('script[type="application/ld+json"]').forEach(script => {
+        try {
+            const data = JSON.parse(script.textContent);
+            if (data['@type'] === 'FAQPage' && data.mainEntity) {
+                data.mainEntity.forEach(item => {
+                    const question = item.name.toLowerCase().trim();
+                    const answer = item.acceptedAnswer.text.trim();
+                    if (question && answer) siteContent.push({ text: cleanInput(question), raw: answer });
+                });
+            }
+        } catch (e) {
+            console.error("Fel vid parsning av JSON-LD:", e);
+        }
+    });
+});
+
+function getResponseFromSite(userMsg, callback) {
+    const matchedItem = findBestMatch(userMsg);
+    if (matchedItem) {
+        callback(matchedItem.fullAnswer);
+    } else {
+        const userWords = cleanInput(userMsg);
+        let bestMatch = null, maxScore = 0;
+
+        siteContent.forEach(item => {
+            let score = 0;
+            userWords.forEach(userWord => {
+                item.text.forEach(siteWord => {
+                    const distance = levenshteinDistance(userWord, siteWord);
+                    const similarity = 1 - distance / Math.max(userWord.length, siteWord.length);
+                    if (similarity >= 0.6) {
+                        score += similarity;
+                    }
+                });
+            });
+            if (score > maxScore) {
+                maxScore = score;
+                bestMatch = item.raw;
+            }
+        });
+
+        if (maxScore > 0 && bestMatch) {
+            callback(bestMatch);
+        } else {
+            callback(getResponse(userMsg));
+        }
+    }
+}
+
+function simulateTyping(callback) {
+    const typingMessage = document.createElement("p");
+    typingMessage.className = "bot-message";
+    typingMessage.textContent = "...";
+    chatMessages.appendChild(typingMessage);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    setTimeout(() => {
+        chatMessages.removeChild(typingMessage);
+        callback();
+    }, conversationHistory.length > 2 ? 1000 : 800);
+}
+
+function addMessage(txt, cls) {
+    const p = document.createElement("p");
+    p.className = cls;
+    p.textContent = txt;
+    chatMessages.appendChild(p);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    if (cls === "bot-message" && voiceEnabled) speak(txt);
+}
+
+// Hantering av flyttning
+let isDragging = false, currentX = 0, currentY = 0, initialX, initialY;
+const dragHandle = document.getElementById("chat-bubble");
+const chatContainer = document.getElementById("chat-container");
+const chatBox = document.getElementById("chat-box");
+const chatMessages = document.getElementById("chat-messages");
+
+dragHandle.addEventListener("mousedown", startDragging);
+dragHandle.addEventListener("touchstart", startDragging, { passive: false });
+document.addEventListener("mousemove", drag);
+document.addEventListener("mouseup", stopDragging);
+document.addEventListener("touchmove", drag, { passive: false });
+document.addEventListener("touchend", stopDragging);
+
+function startDragging(e) {
+    isDragging = true;
+    if (e.type === "mousedown") {
+        initialX = e.clientX - currentX;
+        initialY = e.clientY - currentY;
+    } else if (e.type === "touchstart") {
+        initialX = e.touches[0].clientX - currentX;
+        initialY = e.touches[0].clientY - currentY;
+    }
+}
+
+function drag(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    let newX = e.type === "mousemove" ? e.clientX - initialX : e.touches[0].clientX - initialX;
+    let newY = e.type === "mousemove" ? e.clientY - initialY : e.touches[0].clientY - initialY;
+    const rect = chatContainer.getBoundingClientRect();
+    const maxX = window.innerWidth - rect.width;
+    const maxY = window.innerHeight - rect.height;
+    currentX = Math.max(0, Math.min(newX, maxX));
+    currentY = Math.max(0, Math.min(newY, maxY));
+    chatContainer.style.left = `${currentX}px`;
+    chatContainer.style.top = `${currentY}px`;
+}
+
+function stopDragging() {
+    isDragging = false;
+}
+
+window.addEventListener('load', () => {
+    const rect = chatContainer.getBoundingClientRect();
+    currentX = window.innerWidth - rect.width - 20;
+    currentY = window.innerHeight - rect.height - 20;
+    chatContainer.style.left = `${currentX}px`;
+    chatContainer.style.top = `${currentY}px`;
+});
+
+function adjustChatContainerPosition() {
+    const rect = chatContainer.getBoundingClientRect();
+    const maxX = window.innerWidth - rect.width;
+    const maxY = window.innerHeight - rect.height;
+    currentX = Math.min(currentX, maxX);
+    currentX = Math.max(0, currentX);
+    currentY = Math.min(currentY, maxY);
+    currentY = Math.max(0, currentY);
+    chatContainer.style.left = `${currentX}px`;
+    chatContainer.style.top = `${currentY}px`;
+}
+
+window.addEventListener('resize', adjustChatContainerPosition);
+
+const chatToggle = document.getElementById("chat-toggle");
+const chatForm = document.getElementById("chat-form");
+const chatInput = document.getElementById("chat-input");
+let firstOpen = true;
+
+chatToggle.addEventListener("click", () => {
+    const isHidden = !chatBox.classList.contains("visible");
+    if (isHidden) {
+        chatContainer.style.width = "300px";
+        chatBox.classList.add("visible");
+        chatToggle.setAttribute("aria-expanded", "true");
+        trackClick("ChattÖppnad", "Interaktion", 0);
+        if (!chatMessages.children.length) addMessage(translations.greeting, "bot-message");
+        adjustChatContainerPosition();
+        setTimeout(() => chatInput.focus(), 300);
+        if (firstOpen && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) && recognition) {
+            recognition.start();
+            firstOpen = false;
+        }
+    } else {
+        chatBox.classList.remove("visible");
+        chatToggle.setAttribute("aria-expanded", "false");
+        trackClick("ChattStängd", "Interaktion", 0);
+        chatContainer.style.width = "auto";
+        chatContainer.style.height = "auto";
+        adjustChatContainerPosition();
+    }
+});
+
+chatForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const userMsg = chatInput.value.trim();
+    if (!userMsg) return;
+    addMessage(userMsg, "user-message");
+    trackClick("ChattMeddelande", "Interaktion", 0);
+    chatInput.value = "";
+    simulateTyping(() => {
+        getResponseFromSite(userMsg, (answer) => {
+            addMessage(answer, "bot-message");
+        });
+    });
+});
+
+let voiceEnabled = true;
+
+function speak(text) {
+    if (!voiceEnabled || !("speechSynthesis" in window)) return;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "sv-SE";
+    utterance.pitch = 0.5;
+    utterance.rate = 1.1;
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+        const maleVoice = voices.find(v => v.name.toLowerCase().includes("male") || v.name.toLowerCase().includes("svenska"));
+        if (maleVoice) utterance.voice = maleVoice;
+    }
+    window.speechSynthesis.speak(utterance);
+    trackClick("Röstutgång", "Interaktion", 0);
+}
+
+const voiceToggle = document.getElementById("voice-toggle");
+voiceToggle.addEventListener("click", () => {
+    voiceEnabled = !voiceEnabled;
+    voiceToggle.classList.toggle("disabled", !voiceEnabled);
+    trackClick(voiceEnabled ? "RöstAktiverad" : "RöstInaktiverad", "Interaktion", 0);
+});
+
+let speechRecognitionSupported = "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
+let recognition = null;
+
+if (speechRecognitionSupported) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.lang = "sv-SE";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        addMessage(transcript, "user-message");
+        trackClick("Röstinmatning", "Interaktion", 0);
+        simulateTyping(() => {
+            getResponseFromSite(transcript, (answer) => {
+                addMessage(answer, "bot-message");
+            });
+        });
+    };
+    recognition.onend = () => trackClick("RöstStopp", "Interaktion", 0);
+    recognition.onerror = (event) => trackClick("RöstFel", "Interaktion", event.error);
+}
+
+if (!("speechSynthesis" in window)) voiceToggle.style.display = "none";
 </script nonce="xai-ultra2025">
 
 <!-- JavaScript Scripts -->
